@@ -500,6 +500,3 @@ The project is intentionally implemented from fundamental logic building blocks 
 
 ---
 Nguyen Van Khoa
-
-borrow indicator cho phép trừ**. Ngoài ra phần `74HC86` thứ hai được tách rõ khỏi IC1 để tránh đọc pin mapping bị loạn.
-```
