@@ -1,4 +1,4 @@
-# Arithmetic Logic Unit 4-bit
+# 4-Bit Discrete Logic ALU (Arithmetic Logic Unit)
 
 A hardware-level implementation of a 4-bit **Arithmetic Logic Unit (ALU)** built purely from discrete **74HCxx series logic ICs**—without microcontrollers, FPGAs, or pre-packaged single-chip ALUs (such as the 74HC181).
 
@@ -133,4 +133,6 @@ This project demonstrates low-level digital logic design, two's complement arith
 
 ```
 
-Nguyen Van Khoa
+## 📄 License
+
+This hardware project is open source and distributed under the [MIT License](LICENSE).
