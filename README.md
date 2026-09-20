@@ -17,11 +17,6 @@ The design consists of independent arithmetic and logic units operating in paral
 ---
 
 ## 🚀 Key Features
-
-### Concurrent Parallel Computation
-
-The arithmetic and bitwise logic blocks process the shared 4-bit input vectors `A[3:0]` and `B[3:0]` simultaneously.
-
 ### Arithmetic Operations
 
 - Addition:  
@@ -35,25 +30,6 @@ The arithmetic and bitwise logic blocks process the shared 4-bit input vectors `
 - `A AND B`
 - `A OR B`
 - `A XOR B`
-
-### Carry / Borrow Flag Conditioning
-
-The 74HC283 naturally produces the following carry-out behavior during subtraction:
-
-- `C4 = 1` when `A >= B`
-- `C4 = 0` when `A < B`
-
-To obtain a unified output flag, the design uses an XOR gate:
-Cout = C4 XOR SUB
-
-Therefore:
-
-Operation	SUB	Cout = 1
-Addition	0	Carry-out
-Subtraction	1	Borrow
-Subtraction with A = B	1	0
-
-For subtraction, the output represents a negative result when a borrow occurs.
 
 🧩 Bill of Materials (BOM)
 Component	Part Number	Quantity	Description
@@ -329,44 +305,7 @@ Two's complement representation:
 Because the subtraction requires a borrow:
 
 Cout = 1
-⚠️ Hardware Assembly Guidelines
-Avoid Floating CMOS Inputs
 
-Never leave unused or switch-controlled inputs floating.
-
-For each input switch, use a 10 kΩ pull-down resistor:
-
-+5 V
- │
-Switch
- │
- ├──────→ Logic Input
- │
-10 kΩ
- │
-GND
-
-When the switch is open:
-
-Logic Input = 0
-
-When the switch is closed:
-
-Logic Input = 1
-
-This prevents undefined logic levels and unwanted switching caused by floating CMOS inputs.
-
-🔌 Regulated Power Supply
-
-Use a stable:
-
-+5.0 V DC
-
-for the 74HC logic ICs.
-
-Do not exceed the absolute maximum supply voltage specified in the datasheet of the specific IC being used.
-
-Always verify the datasheet when replacing a 74HC device with a 74LS or other logic-family equivalent.
 
 💡 LED Connection
 
@@ -378,33 +317,14 @@ IC Output
 LED Anode (+)
 LED Cathode (-)
     │
-  330 Ω
+10 Ω
     │
     ▼
    GND
 
-The 330 Ω resistor limits LED current and protects both the LED and logic output.
+The 10 Ω resistor limits LED current and protects both the LED and logic output.
 
-📂 Repository Structure
-4-bit-discrete-alu/
-│
-├── docs/
-│   └── logic_diagram.pdf
-│
-├── images/
-│   ├── alu_schematic.png
-│   └── breadboard_prototype.jpg
-│
-├── simulation/
-│   └── ALU_4bit_Proteus.pdsprj
-│
-└── README.md
-File Description
-docs/logic_diagram.pdf — Gate-level logic diagram
-images/alu_schematic.png — Proteus simulation schematic
-images/breadboard_prototype.jpg — Physical breadboard implementation
-simulation/ALU_4bit_Proteus.pdsprj — Proteus project
-README.md — Project documentation
+
 🧠 Design Architecture
 
 The ALU is organized into independent functional blocks:
@@ -453,6 +373,4 @@ Hardware debugging and verification
 
 The project is intentionally implemented from fundamental logic building blocks rather than using an integrated ALU IC.
 
-📄 License
-
-This project is open source and distributed under the MIT License.
+Nguyen Van Khoa
