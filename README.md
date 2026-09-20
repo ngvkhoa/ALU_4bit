@@ -3,7 +3,7 @@
 
 A hardware-level implementation of a **4-bit Arithmetic Logic Unit (ALU)** designed entirely using discrete **74HCxx series logic ICs**.
 
-This project performs arithmetic and bitwise logic operations without using microcontrollers, FPGAs, or all-in-one ALU ICs such as the 74HC181.
+This project performs arithmetic and bitwise logic operations without using microcontrollers, FPGAs, or all-in-one ALU ICs such as the 74HC283.
 
 ---
 
