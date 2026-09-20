@@ -1,138 +1,458 @@
 # 4-Bit Discrete Logic ALU (Arithmetic Logic Unit)
 
-A hardware-level implementation of a 4-bit **Arithmetic Logic Unit (ALU)** built purely from discrete **74HCxx series logic ICs**—without microcontrollers, FPGAs, or pre-packaged single-chip ALUs (such as the 74HC181).
+A hardware-level implementation of a **4-bit Arithmetic Logic Unit (ALU)** designed entirely using discrete **74HCxx series logic ICs**.
 
-This project demonstrates low-level digital logic design, two's complement arithmetic, bitwise logic operations, and hardware status flag conditioning.
+This project performs arithmetic and bitwise logic operations without using microcontrollers, FPGAs, or all-in-one ALU ICs such as the 74HC181.
 
-## 📸 Circuit Schematics & Simulation
+---
 
-*Figure 1: Full schematic simulation in Proteus.*
+## 📸 Circuit Schematic & Simulation
 
-> **Tip for GitHub**: Place your exported schematic inside an `images/` directory in your repository (`images/alu_schematic.png`), or drag-and-drop the image file directly into the GitHub web editor to host it automatically.
+images/ALU_4bit.png
+
+**Figure 1.** Full 4-bit ALU schematic simulated in Proteus.
+
+The design consists of independent arithmetic and logic units operating in parallel on the same 4-bit input operands.
+
+---
 
 ## 🚀 Key Features
 
-* **Parallel Execution**: Both the arithmetic and bitwise logic blocks compute outputs concurrently from shared 4-bit inputs ($A$ and $B$).
+### Concurrent Parallel Computation
 
-* **Arithmetic Operations**:
+The arithmetic and bitwise logic blocks process the shared 4-bit input vectors `A[3:0]` and `B[3:0]` simultaneously.
 
-  * **Addition**: $A + B$
+### Arithmetic Operations
 
-  * **Subtraction**: $A - B = A + \overline{B} + 1$ (implemented via hardware two's complement).
+- Addition:  
+  `A + B`
 
-* **Bitwise Logic Operations**:
+- Subtraction using two's complement:  
+  `A - B = A + (~B) + 1`
 
-  * $A \text{ AND } B$
+### Bitwise Logic Operations
 
-  * $A \text{ OR } B$
+- `A AND B`
+- `A OR B`
+- `A XOR B`
 
-  * $A \text{ XOR } B$
+### Carry / Borrow Flag Conditioning
 
-* **Intuitive Status Flag Conditioning (**$C_{out}$**)**:
+The 74HC283 naturally produces the following carry-out behavior during subtraction:
 
-  * A standard 4-bit adder produces $C_4 = 1$ on subtraction when $A \ge B$ (no borrow) and $C_4 = 0$ when $A < B$ (borrow).
+- `C4 = 1` when `A >= B`
+- `C4 = 0` when `A < B`
 
-  * An integrated XOR gate ($C_{out} = C_4 \oplus SUB$) automatically resolves this convention:
+To obtain a unified output flag, the design uses an XOR gate:
+Cout = C4 XOR SUB
 
-    * **Addition (**$SUB = 0$**):** $C_{out} = 1$ indicates arithmetic overflow (Carry).
+Therefore:
 
-    * **Subtraction (**$SUB = 1$**):** $C_{out} = 1$ indicates a negative result (Borrow). When $A = B$ (result $= 0000$), $C_{out}$ clears to `0`.
+Operation	SUB	Cout = 1
+Addition	0	Carry-out
+Subtraction	1	Borrow
+Subtraction with A = B	1	0
 
-## 🧩 Bill of Materials (BOM)
+For subtraction, the output represents a negative result when a borrow occurs.
 
-| 
+🧩 Bill of Materials (BOM)
+Component	Part Number	Quantity	Description
+4-Bit Binary Adder	74HC283 / 74LS283	1	4-bit full adder
+Quad 2-Input XOR	74HC86	2	Controlled inversion, XOR logic, and flag conditioning
+Quad 2-Input AND	74HC08	1	Bitwise AND
+Quad 2-Input OR	74HC32	1	Bitwise OR
+4-Position DIP Switch	SPST	2	Inputs for A[3:0] and B[3:0]
+SPST Switch	—	1	SUB control input
+Current-Limiting Resistor	330 Ω, 0.25 W	17	LED protection
+Pull-Down Resistor	10 kΩ, 0.25 W	9	DIP switch input pull-down
+Decoupling Capacitor	100 nF	5	One capacitor per IC
+LED Indicator	5 mm	17	16 output indicators + 1 Cout indicator
+Breadboard	—	1+	Hardware implementation
+Regulated DC Supply	5 V	1	Logic power supply
+📐 Pin Connections & Wiring Guide
+1. Power Rails
 
-| **Component** | **Part Number** | **Quantity** | **Description** | 
-| **4-Bit Binary Adder** | `74HC283` | 1 | High-speed 4-bit binary full adder | 
-| **Quad 2-Input XOR** | `74HC86` | 2 | IC 1: Controllable bit-inverter; IC 2: Logic XOR & flag conditioning | 
-| **Quad 2-Input AND** | `74HC08` | 1 | Bitwise AND operations | 
-| **Quad 2-Input OR** | `74HC32` | 1 | Bitwise OR operations | 
-| **DIP Switches** | 4-position / SPST | 2–3 | Inputs for Operand $A[3:0]$, $B[3:0]$, and mode select $SUB$ | 
-| **Current Limiting Resistors** | 330 $\Omega$ (0.25W) | 17 | LED output protection | 
-| **Pull-down Resistors** | 10 $\text{k}\Omega$ | 9 | Pull-down resistors to GND for DIP switches | 
-| **Decoupling Capacitors** | 100 nF (0.1 $\mu\text{F}$) Ceramic | 5 | Power rail decoupling (1 per IC between VCC and GND) | 
-| **LED Indicators** | 5mm (Red / Green / Yellow) | 17 | Visual output monitoring (16 data bits + 1 carry/borrow flag) | 
+The 74HC series requires a stable supply voltage.
 
-## 📐 Circuit Architecture & Pin Connections
+14-Pin ICs
 
-### 1. Controlled Inverter & Arithmetic Unit
+For:
 
-* **IC1 (`74HC86` - Bit Inverter):**
+74HC08
+74HC32
+74HC86
 
-  * Gate 1: Pin 1 $\rightarrow B_0$, Pin 2 $\rightarrow SUB$ $\implies$ Output Pin 3 ($B_{\text{inv}0}$)
+Connect:
 
-  * Gate 2: Pin 4 $\rightarrow B_1$, Pin 5 $\rightarrow SUB$ $\implies$ Output Pin 6 ($B_{\text{inv}1}$)
+Pin 14 → +5 V
+Pin 7  → GND
+16-Pin IC
 
-  * Gate 3: Pin 9 $\rightarrow B_2$, Pin 10 $\rightarrow SUB$ $\implies$ Output Pin 8 ($B_{\text{inv}2}$)
+For the 74HC283:
 
-  * Gate 4: Pin 12 $\rightarrow B_3$, Pin 13 $\rightarrow SUB$ $\implies$ Output Pin 11 ($B_{\text{inv}3}$)
+Pin 16 → +5 V
+Pin 8  → GND
 
-* **IC2 (`74HC283` - 4-Bit Binary Adder):**
+Place a 100 nF ceramic capacitor between VCC and GND near each IC.
 
-  * Input $A$: Pin 5 ($A_1 \leftarrow A_0$), Pin 3 ($A_2 \leftarrow A_1$), Pin 14 ($A_3 \leftarrow A_2$), Pin 12 ($A_4 \leftarrow A_3$)
+VCC ─────┐
+         │
+       100 nF
+         │
+GND ─────┘
 
-  * Input $B$: Pin 6 ($B_1 \leftarrow B_{\text{inv}0}$), Pin 2 ($B_2 \leftarrow B_{\text{inv}1}$), Pin 15 ($B_3 \leftarrow B_{\text{inv}2}$), Pin 11 ($B_4 \leftarrow B_{\text{inv}3}$)
+This helps reduce supply noise caused by switching transients.
 
-  * Carry In ($C_0$): Pin 7 connected to signal line $SUB$.
+2. Controlled Inverter & Arithmetic Unit
+IC1 — 74HC86
 
-  * Sum Outputs: Pin 4 ($\Sigma_1$), Pin 1 ($\Sigma_2$), Pin 13 ($\Sigma_3$), Pin 10 ($\Sigma_4$).
+The first 74HC86 is used as a controlled inverter.
 
-  * Carry Out ($C_4$): Pin 9.
+The operation is:
 
-### 2. Flag Conditioning ($C_{out}$)
+B_inv = B XOR SUB
 
-* Route Pin 9 ($C_4$ of `74HC283`) and signal $SUB$ into a spare XOR gate on **IC3 (`74HC86`)**.
+Therefore:
 
-* The output of this XOR gate drives `LED_COUT` through a 330 $\Omega$ resistor.
+SUB = 0 → B_inv = B
+SUB = 1 → B_inv = NOT B
+Bit Connections
+Bit	Input B	SUB	Output
+B0	Pin 1	Pin 2	Pin 3
+B1	Pin 4	Pin 5	Pin 6
+B2	Pin 9	Pin 10	Pin 8
+B3	Pin 12	Pin 13	Pin 11
 
-### 3. Bitwise Logic Units
+So:
 
-* **AND (`74HC08`):** Direct pairs $(A_0, B_0) \dots (A_3, B_3)$ into gates 1–4 $\implies$ Outputs on pins 3, 6, 8, 11.
+B_inv0 → Pin 3
+B_inv1 → Pin 6
+B_inv2 → Pin 8
+B_inv3 → Pin 11
+3. 74HC283 4-Bit Binary Adder
 
-* **OR (`74HC32`):** Direct pairs $(A_0, B_0) \dots (A_3, B_3)$ into gates 1–4 $\implies$ Outputs on pins 3, 6, 8, 11.
+The 74HC283 performs:
 
-* **XOR (`74HC86` - IC3):** Remaining gates compute bitwise $A \oplus B \implies$ Outputs on pins 3, 6, 8, 11.
+A + B_inv + SUB
 
-## 📊 Truth Table & Verification Vectors
+This gives:
 
-| **Operation** | **Mode (SUB)** | **Input A** | **Input B** | **Output Display (Σ/Logic)** | **Flag (Cout​)** | **Behavior / Explanation** | 
-| **Normal Addition** | `0` | `0101` (5) | `0011` (3) | `1000` (8) | `0` (OFF) | $5 + 3 = 8$, no carry generated | 
-| **Overflow Addition** | `0` | `1111` (15) | `0001` (1) | `0000` (0) | `1` (ON) | Exceeds 4-bit limit ($16$), carry asserted | 
-| **Equal Subtraction** | `1` | `0001` (1) | `0001` (1) | `0000` (0) | `0` (OFF) | $1 - 1 = 0$, result is non-negative, no borrow | 
-| **Negative Subtraction** | `1` | `0010` (2) | `0101` (5) | `1101` (-3) | `1` (ON) | $2 - 5 = -3$ (two's complement `1101`), borrow asserted | 
-| **Bitwise AND** | `X` | `1100` | `1010` | `1000` | — | Parallel bit-by-bit AND | 
-| **Bitwise OR** | `X` | `1100` | `1010` | `1110` | — | Parallel bit-by-bit OR | 
-| **Bitwise XOR** | `X` | `1100` | `1010` | `0110` | — | Parallel bit-by-bit XOR | 
+SUB = 0:
 
-## ⚠️ Hardware Assembly & Protection Guidelines
+A + B
 
-1. **Floating CMOS Inputs**: High-impedance CMOS gates must never remain floating. Connect a **10** $\text{k}\Omega$ **pull-down resistor** from each switch output pin to ground (`GND`) so the input transitions cleanly to logic `0` when the switch opens.
+and:
 
-2. **Supply Voltage**: Power the circuit strictly with a regulated **+5V DC** supply. Voltages exceeding 6.0V DC will permanently damage 74HC series ICs.
+SUB = 1:
 
-3. **Decoupling Capacitors**: Place a **100 nF ceramic capacitor** across the $V_{CC}$ and $GND$ pins of each integrated circuit as close to the body as possible to mitigate switching transients.
+A + NOT(B) + 1
+= A - B
+Operand A Connections
+Operand	74HC283 Pin
+A0	Pin 5
+A1	Pin 3
+A2	Pin 14
+A3	Pin 12
+Operand B Connections
+Operand	74HC283 Pin	Source
+B_inv0	Pin 6	74HC86 Pin 3
+B_inv1	Pin 2	74HC86 Pin 6
+B_inv2	Pin 15	74HC86 Pin 8
+B_inv3	Pin 11	74HC86 Pin 11
+Carry-In
+74HC283 Pin 7 (C0) → SUB
 
-4. **Active-High LED Wiring**:
-   
+This is what adds the required +1 during two's-complement subtraction.
 
-   $$
-   \text{IC Output Pin} \longrightarrow \text{Anode (+) [LED] Cathode (-)} \longrightarrow 330\,\Omega \text{ Resistor} \longrightarrow \text{GND}
-   $$
+Arithmetic Outputs
+Output	74HC283 Pin
+Σ0	Pin 4
+Σ1	Pin 1
+Σ2	Pin 13
+Σ3	Pin 10
+C4	Pin 9
 
-## 📂 Repository File Structure
+The four sum outputs are connected to the arithmetic result LEDs.
 
-```
+4. Status Flag Conditioning
+
+The raw carry output from the 74HC283 is:
+
+C4
+
+It is passed through an XOR gate together with SUB:
+
+Cout = C4 XOR SUB
+Connections
+74HC283 Pin 9 (C4)
+        │
+        ▼
+74HC86 XOR input
+        │
+SUB ────┘
+        │
+        ▼
+     Cout LED
+
+The conditioned output is connected to the Cout LED through a 330 Ω resistor.
+
+74HC86 output
+     │
+     ▼
+ LED Anode (+)
+ LED Cathode (-)
+     │
+   330 Ω
+     │
+    GND
+5. Bitwise AND Unit — 74HC08
+
+The 74HC08 performs four independent bitwise AND operations.
+
+Bit	Inputs	Output
+0	A0, B0	AND0
+1	A1, B1	AND1
+2	A2, B2	AND2
+3	A3, B3	AND3
+
+Pin connections:
+
+Gate 1:
+Pin 1 → A0
+Pin 2 → B0
+Pin 3 → AND0
+
+Gate 2:
+Pin 4 → A1
+Pin 5 → B1
+Pin 6 → AND1
+
+Gate 3:
+Pin 9  → A2
+Pin 10 → B2
+Pin 8  → AND2
+
+Gate 4:
+Pin 12 → A3
+Pin 13 → B3
+Pin 11 → AND3
+6. Bitwise OR Unit — 74HC32
+
+The 74HC32 performs four independent bitwise OR operations.
+
+Bit	Inputs	Output
+0	A0, B0	OR0
+1	A1, B1	OR1
+2	A2, B2	OR2
+3	A3, B3	OR3
+
+Pin connections:
+
+Gate 1:
+Pin 1 → A0
+Pin 2 → B0
+Pin 3 → OR0
+
+Gate 2:
+Pin 4 → A1
+Pin 5 → B1
+Pin 6 → OR1
+
+Gate 3:
+Pin 9  → A2
+Pin 10 → B2
+Pin 8  → OR2
+
+Gate 4:
+Pin 12 → A3
+Pin 13 → B3
+Pin 11 → OR3
+7. Bitwise XOR Unit — 74HC86
+
+The second 74HC86 performs four independent XOR operations.
+
+XOR0 = A0 XOR B0
+XOR1 = A1 XOR B1
+XOR2 = A2 XOR B2
+XOR3 = A3 XOR B3
+
+Example pin assignment:
+
+Gate 1:
+Pin 1 → A0
+Pin 2 → B0
+Pin 3 → XOR0
+
+Gate 2:
+Pin 4 → A1
+Pin 5 → B1
+Pin 6 → XOR1
+
+Gate 3:
+Pin 9  → A2
+Pin 10 → B2
+Pin 8  → XOR2
+
+Gate 4:
+Pin 12 → A3
+Pin 13 → B3
+Pin 11 → XOR3
+📊 Truth Table & Verification
+
+The following vectors can be used to verify the ALU in Proteus or on the physical breadboard.
+
+Operation	SUB	A	B	Expected Result	Cout
+Addition	0	0101 (5)	0011 (3)	1000 (8)	0
+Addition with Carry	0	1111 (15)	0001 (1)	0000	1
+Equal Subtraction	1	0001 (1)	0001 (1)	0000	0
+Negative Subtraction	1	0010 (2)	0101 (5)	1101 (-3)	1
+Bitwise AND	X	1100	1010	1000	—
+Bitwise OR	X	1100	1010	1110	—
+Bitwise XOR	X	1100	1010	0110	—
+Example: Addition
+A = 0101
+B = 0011
+
+0101 + 0011 = 1000
+
+5 + 3 = 8
+Example: Subtraction
+A = 0010
+B = 0101
+
+0010 - 0101 = -3
+
+Two's complement representation:
+
+-3 = 1101
+
+Because the subtraction requires a borrow:
+
+Cout = 1
+⚠️ Hardware Assembly Guidelines
+Avoid Floating CMOS Inputs
+
+Never leave unused or switch-controlled inputs floating.
+
+For each input switch, use a 10 kΩ pull-down resistor:
+
++5 V
+ │
+Switch
+ │
+ ├──────→ Logic Input
+ │
+10 kΩ
+ │
+GND
+
+When the switch is open:
+
+Logic Input = 0
+
+When the switch is closed:
+
+Logic Input = 1
+
+This prevents undefined logic levels and unwanted switching caused by floating CMOS inputs.
+
+🔌 Regulated Power Supply
+
+Use a stable:
+
++5.0 V DC
+
+for the 74HC logic ICs.
+
+Do not exceed the absolute maximum supply voltage specified in the datasheet of the specific IC being used.
+
+Always verify the datasheet when replacing a 74HC device with a 74LS or other logic-family equivalent.
+
+💡 LED Connection
+
+For active-high LED indicators:
+
+IC Output
+    │
+    ▼
+LED Anode (+)
+LED Cathode (-)
+    │
+  330 Ω
+    │
+    ▼
+   GND
+
+The 330 Ω resistor limits LED current and protects both the LED and logic output.
+
+📂 Repository Structure
+4-bit-discrete-alu/
+│
 ├── docs/
-│   └── logic_diagram.pdf           # Gate-level wiring diagrams
+│   └── logic_diagram.pdf
+│
 ├── images/
-│   ├── alu_schematic.png           # Exported Proteus schematic
-│   └── breadboard_prototype.jpg    # Physical hardware setup
+│   ├── alu_schematic.png
+│   └── breadboard_prototype.jpg
+│
 ├── simulation/
-│   └── ALU_4bit_Proteus.pdsprj     # Proteus simulation project file
-└── README.md                       # Project documentation
+│   └── ALU_4bit_Proteus.pdsprj
+│
+└── README.md
+File Description
+docs/logic_diagram.pdf — Gate-level logic diagram
+images/alu_schematic.png — Proteus simulation schematic
+images/breadboard_prototype.jpg — Physical breadboard implementation
+simulation/ALU_4bit_Proteus.pdsprj — Proteus project
+README.md — Project documentation
+🧠 Design Architecture
 
-```
+The ALU is organized into independent functional blocks:
 
-## 📄 License
+                 ┌─────────────────────┐
+A[3:0] ─────────►│                     │
+                 │   Arithmetic Unit   │──────► Arithmetic Result
+B[3:0] ─────────►│     74HC283         │
+        ┌───────►│                     │
+        │        └─────────────────────┘
+        │
+        │
+        │        ┌─────────────────────┐
+        ├───────►│      AND Unit       │──────► AND Result
+        │        │      74HC08         │
+        │        └─────────────────────┘
+        │
+        │        ┌─────────────────────┐
+        ├───────►│       OR Unit       │──────► OR Result
+        │        │      74HC32         │
+        │        └─────────────────────┘
+        │
+        │        ┌─────────────────────┐
+        └───────►│      XOR Unit       │──────► XOR Result
+                 │      74HC86         │
+                 └─────────────────────┘
 
-This hardware project is open source and distributed under the [MIT License](LICENSE).
+The arithmetic and logic blocks operate concurrently. A future revision can add an output multiplexer and operation-selection logic to create a single 4-bit ALU output bus.
+
+📌 Project Highlights
+
+This project demonstrates practical understanding of:
+
+Combinational digital logic
+Full-adder architecture
+Two's-complement arithmetic
+Carry and borrow behavior
+XOR-controlled inversion
+Bitwise logic operations
+74HC-series logic ICs
+CMOS input handling
+LED output interfacing
+Breadboard-level hardware design
+Proteus circuit simulation
+Hardware debugging and verification
+
+The project is intentionally implemented from fundamental logic building blocks rather than using an integrated ALU IC.
+
+📄 License
+
+This project is open source and distributed under the MIT License.
