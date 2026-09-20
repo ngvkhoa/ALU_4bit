@@ -499,4 +499,3 @@ This project demonstrates practical understanding of:
 The project is intentionally implemented from fundamental logic building blocks rather than using an integrated ALU IC.
 
 ---
-Nguyen Van Khoa
