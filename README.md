@@ -136,7 +136,3 @@ gtkwave waveform.vcd
 | Pull-Down Resistor | 10 kΩ, 0.25 W | 9 | Input stabilization to GND |
 | Decoupling Capacitor | 100 nF Ceramic | 5 | VCC-GND supply rail transient filter |
 | LED Indicator | 5 mm Diffused | 17 | 16 function outputs + 1 status flag |
-
-```
-
-```
