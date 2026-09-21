@@ -1,0 +1,26 @@
+name: Verilog Simulation CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  simulation:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install Icarus Verilog
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y iverilog
+
+      - name: Run Self-Checking Testbench
+        run: |
+          mkdir -p build
+          iverilog -o build/ALU_4bit_tb.out rtl/ALU_4bit.v sim/ALU_4bit_tb.v
+          vvp build/ALU_4bit_tb.out
