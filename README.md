@@ -7,11 +7,15 @@ This project performs arithmetic and bitwise logic operations without using micr
 
 ---
 
-## 📸 Circuit Schematic & Simulation
+## 📸 Circuit Schematic & Wave form
 
 ![4-Bit ALU Schematic](images/ALU_4bit.png)
 
 **Figure 1.** Full 4-bit ALU schematic simulated in Proteus.
+
+![4-Bit ALU Schematic](sim/waveform.png)
+
+**Figure 2.** Wave form Testcases.
 
 The design consists of independent arithmetic and logic units operating in parallel on the same 4-bit input operands.
 
