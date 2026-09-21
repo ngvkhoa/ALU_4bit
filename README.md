@@ -15,7 +15,7 @@ The project models the exact gate-level hardware architecture in **Proteus** and
 *Figure 1: Full 4-bit ALU circuit schematic designed and simulated in Proteus.*
 
 ### RTL Simulation Waveform
-![ALU Simulation Waveform](images/waveform.png)
+![ALU Simulation Waveform](sim/waveform.png)
 *Figure 2: Verilog simulation waveform generated via Icarus Verilog and visualized using GTKWave.*
 
 ---
@@ -138,7 +138,5 @@ gtkwave waveform.vcd
 | LED Indicator | 5 mm Diffused | 17 | 16 function outputs + 1 status flag |
 
 ```
-
-3. Nhấn **Commit changes...** để lưu lại. Khi mở trang chủ repo, bạn sẽ thấy huy hiệu `CI: passing` hiển thị ngay cạnh tiêu đề dự án[cite: 2].
 
 ```
