@@ -1,0 +1,12 @@
+# Icarus Verilog build outputs
+*.out
+*.vvp
+build/
+
+# Simulation dumps
+*.vcd
+
+# Proteus backup files
+*.pwi
+*.workspace
+* - Backup*
