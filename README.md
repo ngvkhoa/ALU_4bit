@@ -11,7 +11,7 @@ The project models the exact gate-level hardware architecture in **Proteus** and
 ## 📸 Circuit Schematic & Waveform Verification
 
 ### Hardware Gate-Level Schematic
-![4-Bit ALU Schematic](images/ALU_4bit.png)
+![4-Bit ALU Schematic](images/)
 *Figure 1: Full 4-bit ALU circuit schematic designed and simulated in Proteus.*
 
 ### RTL Simulation Waveform
