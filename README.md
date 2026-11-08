@@ -18,6 +18,10 @@ The project models the exact gate-level hardware architecture in **Proteus** and
 ![ALU Simulation Waveform](sim/waveform.png)
 *Figure 2: Verilog simulation waveform generated via Icarus Verilog and visualized using GTKWave.*
 
+### Finished PCB
+![Finished PCB](images/ALU_4bit_1.png)
+*Figure 3: Finished PCB*
+
 ---
 
 ## 🚀 Key Features
