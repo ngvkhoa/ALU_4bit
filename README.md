@@ -15,7 +15,7 @@ The project models the exact gate-level hardware architecture in **Proteus** and
 *Figure 1: Full 4-bit ALU circuit schematic designed and simulated in Proteus.*
 
 ### RTL Simulation Waveform
-![ALU Simulation Waveform](sim/waveform.png)
+![ALU Simulation Waveform](simwaveform.png)
 *Figure 2: Verilog simulation waveform generated via Icarus Verilog and visualized using GTKWave.*
 
 ### Finished PCB
