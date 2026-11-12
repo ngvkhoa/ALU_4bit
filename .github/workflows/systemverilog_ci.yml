@@ -1,4 +1,4 @@
-name: Verilog Simulation CI
+name: System Verilog Simulation CI
 
 on:
   push:
@@ -19,8 +19,8 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y iverilog
 
-      - name: Run Self-Checking Testbench
+      - name: Run Simulation
         run: |
           mkdir -p build
-          iverilog -o build/ALU_4bit_tb.out rtl/ALU_4bit.v sim/ALU_4bit_tb.v
-          vvp build/ALU_4bit_tb.out
+          iverilog -g2012 -o build/tb_ALU_4bit.out rtl/ALU_4bit.sv sim/tb_ALU_4bit.sv
+          vvp build/tb_ALU_4bit.out
