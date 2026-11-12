@@ -1,6 +1,6 @@
 # 4-Bit Discrete Logic ALU (Arithmetic Logic Unit)
 
-![CI Status](https://github.com/ngvkhoa/ALU_4bit/actions/workflows/verilog_ci.yml/badge.svg)
+![CI Status](https://github.com/ngvkhoa/ALU_4bit/actions/workflows/systemverilog_ci.yml/badge.svg)
 
 A hardware-level implementation and RTL verification of a **4-bit Arithmetic Logic Unit (ALU)** designed entirely using discrete **74HCxx series logic ICs** (74HC283, 74HC86, 74HC08, 74HC32) without integrated microcontrollers or FPGAs.
 
