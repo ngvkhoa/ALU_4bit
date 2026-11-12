@@ -51,76 +51,37 @@ $$\text{Cout} = C_4 \oplus \text{SUB}$$
 ## 💻 Verilog HDL Architecture
 
 The hardware architecture is organized into dedicated directories:
-* `rtl/ALU_4bit.v`: Structural Verilog model reflecting discrete IC wiring.
-* `sim/ALU_4bit_tb.v`: Automated self-checking testbench.
+* `rtl/ALU_4bit.sv`: Structural Verilog model reflecting discrete IC wiring.
+* `sim/tb_ALU_4bit.sv`: Automated self-checking testbench.
 
-```verilog
+```system verilog
 module ALU_4bit (
-    input  wire [3:0] A,
-    input  wire [3:0] B,
-    input  wire       SUB,
+    input logic [3:0] A,
+    input logic [3:0] B,
+    input logic       SUB,
+    
+    output logic [3:0] ARITH_out,
+    output logic       C_out,
 
-    output wire [3:0] ARITH_out,
-    output wire       C_out,
-
-    output wire [3:0] AND_out,
-    output wire [3:0] OR_out,
-    output wire [3:0] XOR_out
+    output logic [3:0] AND_out,
+    output logic [3:0] OR_out,
+    output logic [3:0] XOR_out
 );
 
-    // Controlled Bit Inversion (74HC86 Quad XOR)
-    wire [3:0] B_inv;
-    assign B_inv = B ^ {4{SUB}};
+    logic [3:0] B_inv;
+    logic       C4;
     
-    // 4-bit Binary Full Adder (74HC283)
-    wire C4;
-    assign {C4, ARITH_out} = A + B_inv + SUB;
-
-    // Conditioned Carry/Borrow Flag
-    assign C_out = C4 ^ SUB;
-
-    // Bitwise Logic Units (74HC08, 74HC32, 74HC86)
-    assign AND_out = A & B;
-    assign OR_out  = A | B;
-    assign XOR_out = A ^ B;
+    always_comb begin
+        B_inv = B ^ {4{SUB}};
+        {C4, ARITH_out} = A + B_inv + SUB;
+        C_out = C4 ^ SUB;
+        
+        AND_out = A & B;
+        OR_out = A | B;
+        XOR_out = A ^ B;
+    end
 
 endmodule
-
-```
-
----
-
-## 📊 Verification & Test Vectors
-
-The circuit has been validated against all primary arithmetic and logic corner cases using an automated self-checking testbench:
-
-| Testcase | Mode (`SUB`) | Input `A` | Input `B` | Expected Result | Expected `Cout` | Status |
-| --- | --- | --- | --- | --- | --- | --- |
-| **Test 1: Normal Addition** | `0` | `0101` (5) | `0011` (3) | `1000` (8) | `0` | **PASS** |
-| **Test 2: Overflow Addition** | `0` | `1111` (15) | `0001` (1) | `0000` (0) | `1` | **PASS** |
-| **Test 3: Equality Subtraction** | `1` | `0111` (7) | `0111` (7) | `0000` (0) | `0` | **PASS** |
-| **Test 4: Positive Subtraction** | `1` | `1001` (9) | `0100` (4) | `0101` (5) | `0` | **PASS** |
-| **Test 5: Underflow Subtraction** | `1` | `0011` (3) | `0101` (5) | `1110` (-2 / 0xE) | `1` | **PASS** |
-
----
-
-## 🛠 Local Simulation Quickstart
-
-### Prerequisites
-
-Install [Icarus Verilog](https://www.google.com/search?q=https://bleyer.org/icarus/&utm_source=gemini) and [GTKWave](https://gtkwave.sourceforge.net/?utm_source=gemini).
-
-### Running Simulation
-
-```bash
-# Compile design and testbench
-iverilog -o build/ALU_4bit_tb.out rtl/ALU_4bit.v sim/ALU_4bit_tb.v
-
-# Run simulation
-vvp build/ALU_4bit_tb.out
-
-# View waveform dump
-gtkwave waveform.vcd
 
 ```
 
