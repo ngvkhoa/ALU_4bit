@@ -4,8 +4,6 @@
 
 A hardware-level implementation and RTL verification of a **4-bit Arithmetic Logic Unit (ALU)** designed entirely using discrete **74HCxx series logic ICs** (74HC283, 74HC86, 74HC08, 74HC32) without integrated microcontrollers or FPGAs.
 
-The project models the exact gate-level hardware architecture in **Proteus** and provides a cycle-accurate, self-checking simulation in **Verilog HDL** via **Icarus Verilog** and **GTKWave**.
-
 ---
 
 ## 📸 Circuit Schematic & Waveform Verification
