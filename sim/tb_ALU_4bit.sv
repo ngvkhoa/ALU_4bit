@@ -30,7 +30,7 @@ module ALU_4bit_tb;
         A = 4'd3;  B = 4'd5; SUB = 1'b1;
         #10;
 
-        $stop;
+        $finish;
     end
 
 endmodule
