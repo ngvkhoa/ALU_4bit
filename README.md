@@ -48,7 +48,7 @@ $$\text{Cout} = C_4 \oplus \text{SUB}$$
 
 ---
 
-## 💻 Verilog HDL Architecture
+## 💻 System Verilog HDL Architecture
 
 The hardware architecture is organized into dedicated directories:
 * `rtl/ALU_4bit.sv`: Structural Verilog model reflecting discrete IC wiring.
