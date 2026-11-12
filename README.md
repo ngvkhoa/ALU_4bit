@@ -14,7 +14,7 @@ A hardware-level implementation and RTL verification of a **4-bit Arithmetic Log
 
 ### RTL Simulation Waveform
 ![ALU Simulation Waveform](sim/waveform.png)
-*Figure 2: Verilog simulation waveform generated via Icarus Verilog and visualized using GTKWave.*
+*Figure 2: System Verilog simulation waveform generated via Vivado*
 
 ### Finished PCB
 ![Finished PCB](images/ALU_4bit_1.png)
@@ -49,7 +49,7 @@ $$\text{Cout} = C_4 \oplus \text{SUB}$$
 ## 💻 System Verilog HDL Architecture
 
 The hardware architecture is organized into dedicated directories:
-* `rtl/ALU_4bit.sv`: Structural Verilog model reflecting discrete IC wiring.
+* `rtl/ALU_4bit.sv`: Structural System Verilog model reflecting discrete IC wiring.
 * `sim/tb_ALU_4bit.sv`: Automated self-checking testbench.
 
 ```system verilog
