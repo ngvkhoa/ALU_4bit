@@ -6,7 +6,7 @@ A hardware-level implementation and RTL verification of a **4-bit Arithmetic Log
 
 ---
 
-## 📸 Circuit Schematic & Waveform Verification
+## Circuit Schematic & Waveform Verification
 
 ### Hardware Gate-Level Schematic
 ![4-Bit ALU Schematic](images/ALU_4bit.png)
@@ -22,7 +22,7 @@ A hardware-level implementation and RTL verification of a **4-bit Arithmetic Log
 
 ---
 
-## 🚀 Key Features
+## Key Features
 
 ### 1. Concurrent Parallel Computation
 The arithmetic and logic blocks process the shared 4-bit input vectors `A[3:0]` and `B[3:0]` simultaneously without clock latency:
@@ -46,7 +46,7 @@ $$\text{Cout} = C_4 \oplus \text{SUB}$$
 
 ---
 
-## 💻 System Verilog HDL Architecture
+## System Verilog HDL Architecture
 
 The hardware architecture is organized into dedicated directories:
 * `rtl/ALU_4bit.sv`: Structural System Verilog model reflecting discrete IC wiring.
@@ -85,7 +85,7 @@ endmodule
 
 ---
 
-## 🧩 Bill of Materials (BOM)
+## Bill of Materials (BOM)
 
 | Component | Part Number | Quantity | Description |
 | --- | --- | --- | --- |
